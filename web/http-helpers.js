@@ -11,17 +11,25 @@ exports.headers = headers = {
 };
 
 exports.serveAssets = function(res, asset) {
+  console.log('serving asset ' + asset);
+  console.log('PWD: '+process.cwd());
+
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...), css, or anything that doesn't change often.)
   fs.readFile(asset, function(err, data) {
     if (err) {
+      console.log('err detected reading file: ' + err);
       res.writeHead(500);
       res.end();
       return;
     }
-    res.writeHead(200, headers);
-    res.write(data);
-    res.end();
+
+    var head = headers;
+    if (path.extname(asset) === '.css') {
+      head = {'Content-Type': "text/css"};
+    }
+    res.writeHead(200, head);
+    res.end(data);
   });
 
 };
