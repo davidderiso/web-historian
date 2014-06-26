@@ -15,6 +15,8 @@ exports.paths = {
   'list' : path.join(__dirname, '../archives/sites.txt')
 };
 
+var sitesObj = {};
+
 // Used for stubbing paths for jasmine tests, do not modify
 exports.initialize = function(pathsObj){
   _.each(pathsObj, function(path, type) {
@@ -24,14 +26,39 @@ exports.initialize = function(pathsObj){
 
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
-
 exports.readListOfUrls = function(){
+  // if urlList is empty or if sites.txt has changed since last load, then re-load
+
+  // Check if sitesObj is empty
+  if (Object.keys(sitesObj).length > 0) {
+    // If not empty return sitesObj
+    return sitesObj;
+  }
+  // Else readFile and build sitesObj
+  fs.readFile(exports.paths.list, {encoding: 'utf8'}, function(err, sites){
+    // sites holds reference to our data.
+    sites = sites.split('\n');
+    for (var i = 0; i < sites.length; i++) {
+      if (sites[i].length > 0) {
+        sitesObj[sites[i]] = true;
+      }
+    }
+    return sitesObj;
+  });
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(searchUrl){
+  // Read sites file -- Assume it returns an object hash.
+  var urlList = exports.readListOfUrls();
+  console.log(Object.keys(urlList));
+  // If searchUrl in object
+    // Return true
+  // Else
+    // Return false
 };
 
 exports.addUrlToList = function(){
+  // Adjust sites.txt AND sitesObj
 };
 
 exports.isURLArchived = function(){
