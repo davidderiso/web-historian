@@ -15,14 +15,23 @@ exports.handleRequest = function (req, res) {
     } else if (req.method === 'POST') {
       httpHelpers.collectData(req, function(postData) {
         //Check if url is in file -- Expect true/false result.
-        archive.isUrlInList(postData);
+        console.log(archive.isUrlInList(postData));
+        if (archive.isUrlInList(postData)) {
           // If url in file check if the page is cached
+          // if (archive.isUrlArchived(postData)) {
+
             // return the cached page
+            httpHelpers.serveAssets(res, (archive.paths.archivedSites + '/' + postData));
+          // }
           // If url in file and page NOT cached
             // Show loading page
+        }
+        else {
+          console.log('sadness');
+        }
         // If url not in file
           // Add url to file
-          // Show loading page
+          // Show loading page/
 
         // archive.readListOfUrls(function(test) {
         //   console.log(test);
